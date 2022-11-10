@@ -33,11 +33,16 @@ Route::prefix('/board')->group(function(){
         Route::delete('/{id}',[BoardController::class, 'delete'])->name('board.delete');
     });
     Route::get('/all/{page}',[BoardController::class, 'showAll'])->name('boards.show');
+    Route::get('/pages',[BoardController::class, 'allPage'])->name('board.page');
     Route::get('/{id}',[BoardController::class, 'show'])->name('board.show');
 });
 
 Route::prefix('/comment')->group(function(){
-    Route::post('/', [CommentController::class,'create'])->name('comment.create');
+    Route::middleware(['auth'])->group(function(){
+        Route::post('/', [CommentController::class,'create'])->name('comment.create');
+        Route::put('/{id}', [CommentController::class,'update'])->name('comment.update');
+        Route::delete('/{id}',[CommentController::class,'delete'])->name('comment.delete');
+    });
     Route::get('/', [CommentController::class,'show'])->name('comment.show');
 });
 

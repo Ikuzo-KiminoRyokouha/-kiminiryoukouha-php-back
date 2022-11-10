@@ -63,11 +63,13 @@ class BoardController extends Controller
     }
 
     public function update(Request $request, $id){
+        Log::info($request);
         if(Auth::user()->id !==Board::where('id',$id)->get('user_id')[0]->user_id ){
             return response()->json([
                 "message" => "you can not update this notice"
             ],RESPONSE::HTTP_FORBIDDEN);
         }
+
         if(Board::where('id',$id)->exists()){
             $fetchedData = Board::find($id);
             $fetchedData->update($request->all());
@@ -91,7 +93,8 @@ class BoardController extends Controller
 
         if(Board::where('id',$id)->exists()){
             $fetchedData = Board::find($id);
-            $fetchedData->delete();
+            $fetchedData->update(['deleted_at',\now()]);
+            Log::info(\now());
 
             return response()->json([
                 "message"=>"complete destroy"
@@ -101,6 +104,14 @@ class BoardController extends Controller
                 "message"=>"Not found id=${id} notice"
             ],RESPONSE::HTTP_NOT_FOUND);
         }
+    }
+
+    public function allPage(Request $request){
+        $pages = ceil(Board::count()/10);
+        
+        return response()->json([
+            $pages
+        ],RESPONSE::HTTP_OK);
     }
 
 }

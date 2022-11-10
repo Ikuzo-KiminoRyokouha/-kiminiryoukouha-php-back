@@ -41,7 +41,38 @@ class CommentController extends Controller
         return response()->json([
             $comment
         ],RESPONSE::HTTP_OK);
-       
+    }
+
+    public function update(Request $request , $id){
+        Log::info($request->all());
+        
+        if(Auth::user()->id !==Comment::where('id',$id)->get('user_id')[0]->user_id ){
+            return response()->json([
+                "message" => "you can not update this notice"
+            ],RESPONSE::HTTP_FORBIDDEN);
+        }
+
+        if(Comment::where('id' ,$id)->exists()){
+            Log::info($request);
+            $fetchdData = Comment::find($id);
+            $fetchdData->update($request->all());
+            Log::info($fetchdData);
+            return response()->json([
+                "message" => "completed update"
+            ],RESPONSE::HTTP_OK);
+        }else{
+            return response()->json([
+                "message"=>"There is no previous"
+            ],RESPONSE::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function delete(Request $request , $id){
+        if(Auth::user()->id !==Comment::where('id',$id)->get('user_id')[0]->user_id ){
+            return response()->json([
+                "message" => "you can not update this notice"
+            ],RESPONSE::HTTP_FORBIDDEN);
+        }
     }
 
 
