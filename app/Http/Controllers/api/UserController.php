@@ -11,13 +11,9 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     //
-    public function show(Request $request){
-        $data = $request->session()->all();
-        Log::info($data);
-        Log::info('-------');
-        Log::info(Auth::user());
+    public function myInfo(Request $request){
         return \response()->json([
-            'user' => Auth::user()
+            'user' => Auth::user()->only("email" , "name", "role" , "created_at")
         ],\Symfony\Component\HttpFoundation\Response::HTTP_OK);
     }
 

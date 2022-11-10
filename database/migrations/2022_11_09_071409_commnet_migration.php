@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('comments',function(Blueprint $table){
             $table->id();
             $table->timestamps();
-            $table->softDeletesTz($column = 'deleted_at', $precision = 0)->nullable();
+            $table->softDeletes();
             $table->string('content');
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade'); //댓글 작성자
             $table->foreignId('target_id')->nullable()->constrained('users')->onUpdate('cascade')->onDelete('cascade'); //대댓글의 타겟 작성자    

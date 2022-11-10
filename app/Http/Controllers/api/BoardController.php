@@ -54,10 +54,12 @@ class BoardController extends Controller
         ],RESPONSE::HTTP_OK);
     }
 
-    public function showAll(Request $request){
-        $page = $request->page;
-        $board = DB::table('boards')->skip(($page - 1) * 10)->take(10)->get(['id' , 'title' , 'content','user_id','created_at','updated_at']);
+    public function showAll(Request $request,$page){
+        $board = Board::skip(($page - 1) * 10)->take(10)
+                ->get(['id' , 'title' , 'content','user_id','created_at','updated_at']);
+        $pages = ceil(Board::count()/10);
         return response()->json([
+            $pages,
             $board
         ],RESPONSE::HTTP_OK);
     }
@@ -93,8 +95,7 @@ class BoardController extends Controller
 
         if(Board::where('id',$id)->exists()){
             $fetchedData = Board::find($id);
-            $fetchedData->update(['deleted_at',\now()]);
-            Log::info(\now());
+            $fetchedData->delete();
 
             return response()->json([
                 "message"=>"complete destroy"
@@ -111,6 +112,28 @@ class BoardController extends Controller
         
         return response()->json([
             $pages
+        ],RESPONSE::HTTP_OK);
+    }
+
+    public function deletedBoard(Request $request,$page){
+        $deletedBoard = Board::where('user_id', Auth::user()->id)
+                        ->skip(($page - 1) * 10)->take(10)
+                        ->onlyTrashed()->get(['id','title' , 'content','user_id','created_at','deleted_at']);
+        $pages = ceil(Board::where('user_id', Auth::user()->id)->onlyTrashed()->count()/10);
+        return response()->json([
+            $pages,
+            $deletedBoard
+        ],RESPONSE::HTTP_OK);
+    }
+
+    public function searchData(Request $request,$searchItem,$page){
+        $filterData = Board::where('title','LIKE','%'.$searchItem.'%')
+                    ->skip(($page - 1) * 10)->take(10)
+                    ->get(['id' , 'title' , 'content','user_id','created_at','updated_at']);
+        $pages = ceil(Board::where('title','LIKE','%'.$searchItem.'%')->count()/10);
+        return response()->json([
+            $pages,
+            $filterData
         ],RESPONSE::HTTP_OK);
     }
 

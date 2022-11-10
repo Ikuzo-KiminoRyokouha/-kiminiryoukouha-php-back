@@ -17,11 +17,19 @@ return new class extends Migration
         Schema::create('boards',function(Blueprint $table){
             $table->id();
             $table->timestamps();
-            $table->softDeletesTz($column = 'deleted_at', $precision = 0)->nullable();
+            // $table->softDeletesTz($column = 'deleted_at', $precision = 0)->nullable();
+            $table->softDeletes();
             $table->foreignId('user_id')->constrained();
             $table->string('title');
             $table->string('content');
         });
+
+        // Schema::table('boards', function (Blueprint $table) {
+        // });
+         
+        // Schema::table('boards', function (Blueprint $table) {
+        //     $table->dropSoftDeletes();
+        // });
     }
 
     /**

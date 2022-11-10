@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Board;
@@ -10,7 +11,7 @@ use App\Models\Board;
 
 class Comment extends Model
 {
-    use HasFactory;
+    use HasFactory , SoftDeletes;
     protected $fillable = [
         'content', 'group', 'sequence', 'created_at','updated_at','user_id','board_id','target_id'
     ];

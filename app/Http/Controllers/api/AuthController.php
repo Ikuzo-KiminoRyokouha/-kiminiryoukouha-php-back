@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -21,18 +22,17 @@ class AuthController extends Controller
             'name'=>'required|string|max:255',
             'email'=>'required|string|max:255|email',
             'password'=>'required|string|min:5',
-            'role' => 'required|string|max:255'
+            'role' => 'required|string|max:255',
         ]);
 
         if($valid->fails()){
             return response()->json([
                 'error' => $valid->errors()->all()
-            ],\Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST);
+            ],RESPONSE::HTTP_BAD_REQUEST);
         }
 
         $data = request()->only('name' , 'email', 'password', 'role');
 
-        Log::info($data);
         $user = User::create([
             'name' =>$data['name'],
             'email' =>$data['email'],
@@ -42,8 +42,8 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => "sign up is complete",
-            'user' =>$user,
-        ],\Symfony\Component\HttpFoundation\Response::HTTP_CREATED);
+            'user' =>$user->name,
+        ],RESPONSE::HTTP_CREATED);
     }
 
     public function login(Request $request){
@@ -58,12 +58,12 @@ class AuthController extends Controller
             $request->session()->put('key',$loginCredential['email']);
             return \response()->json([
                 'message' => 'complete login'
-            ],\Symfony\Component\HttpFoundation\Response::HTTP_OK);
+            ],RESPONSE::HTTP_OK);
         }
  
         return response()->json([
             'message'=>'Invalid login information'
-        ],\Symfony\Component\HttpFoundation\Response::HTTP_UNAUTHORIZED);
+        ],RESPONSE::HTTP_UNAUTHORIZED);
     }   
 
     public function logout(Request $request){
@@ -72,11 +72,33 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
         return \response()->json([
             'session'=>Auth::user()
-        ],\Symfony\Component\HttpFoundation\Response::HTTP_OK);
+        ],RESPONSE::HTTP_OK);
     }
 
     public function checkDuplicateEmail(Request $request){
+        $valid = \validator($request->only('check_duplicate'),[
+            'check_duplicate'=>'required|string|max:255|email',
+        ]);
 
+        if($valid->fails()){
+            return response()->json([
+                'error' => $valid->errors()->all()
+            ],RESPONSE::HTTP_BAD_REQUEST);
+        }
+
+        $data = \request()->only('check_duplicate');
+
+        $check = true;
+
+        if(User::where('email',$data['check_duplicate'])->exists()){
+            $check = false;
+        }
+        Log::info('chekc');
+
+        return response()->json([
+            $check
+        ],RESPONSE::HTTP_OK);
     }
+
     
 }
