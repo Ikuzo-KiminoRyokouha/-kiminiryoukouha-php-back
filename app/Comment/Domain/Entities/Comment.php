@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Comment\Domain\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Board;
+use App\User\Domain\Entities\User;
+use App\Board\Domain\Entities\Board;
 
 
 class Comment extends Model

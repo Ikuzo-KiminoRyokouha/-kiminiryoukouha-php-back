@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Board\Domain\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
+use App\User\Domain\Entities\User;
 
 class Board extends Model
 {
