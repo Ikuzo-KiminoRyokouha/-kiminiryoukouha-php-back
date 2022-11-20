@@ -10,7 +10,7 @@ use App\User\Domain\Entities\User;
 class Board extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable = ['title','content','created_at','updated_at','user_id'];
+    protected $fillable = ['title','content','created_at','updated_at','user_id','private','password'];
     protected $primaryKey = 'id';
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',

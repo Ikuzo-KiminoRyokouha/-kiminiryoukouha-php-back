@@ -2,6 +2,7 @@
 
 namespace App\Board\Responders;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 
 class BoardResponder{
@@ -19,6 +20,12 @@ class BoardResponder{
                 'message' => 'not found board'
             ]);
             $this->response->setStatusCode(Response::HTTP_NOT_FOUND);
+        }else if($board[0]->private == true && $board[0]->user->id !== Auth::user()->id){
+            $this->response->setContent([
+                'ok' =>false,
+                'message' => 'you can not access this content'
+            ]);
+            $this->response->setStatusCode(Response::HTTP_FORBIDDEN);
         }else{
             $this->response->setContent([
                 'ok' =>true,

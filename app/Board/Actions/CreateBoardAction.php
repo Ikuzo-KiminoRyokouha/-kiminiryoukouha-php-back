@@ -27,16 +27,17 @@ class CreateBoardAction extends Controller{
     }
 
     public function __invoke(Request $request){
-        $valid = validator($request->only('title' , 'content'),[
+        $valid = validator($request->only('title' , 'content' ,'private' ),[
             'title' =>'required|string|max:255',
             'content'=> 'required|string',
+            'private' => 'required',
         ]);
-
+        
         if($valid->fails()){
             return $this->validResponder->response($valid);
         }
 
-        $data = request()->only('title', 'content');
+        $data = request()->only('title', 'content' , 'private' );
 
         $check = $this->createBaord->create($data);
 
