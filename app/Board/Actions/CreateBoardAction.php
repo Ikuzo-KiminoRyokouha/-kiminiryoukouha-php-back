@@ -10,6 +10,7 @@ use App\Common\Responders\RequestValidResponder;
 
 
 
+
 class CreateBoardAction extends Controller{
 
     protected $createBaord;
@@ -32,6 +33,8 @@ class CreateBoardAction extends Controller{
             'content'=> 'required|string',
             'private' => 'required',
         ]);
+        $data = request()->only('title', 'content' , 'private' );
+
         
         if($valid->fails()){
             return $this->validResponder->response($valid);
