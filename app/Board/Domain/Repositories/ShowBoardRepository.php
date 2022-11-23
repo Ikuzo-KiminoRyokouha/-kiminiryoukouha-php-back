@@ -11,7 +11,7 @@ class ShowBoardRepository implements ShowBoardRepositoryInterface{
                     ->with(['user'=> function ($query) {
                         $query->select(['name','id']);
                     }])
-                     ->get(['id' , 'title' , 'content','user_id','created_at','updated_at', 'private']);
+                     ->get(['id' , 'title' , 'content','user_id','created_at','updated_at', 'private','complete']);
         
         return $board;
     }

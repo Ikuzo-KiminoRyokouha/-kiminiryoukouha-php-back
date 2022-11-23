@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('content');
             $table->boolean('private');
+            $table->boolean('complete')->default(false);
         });
 
         // Schema::table('boards', function (Blueprint $table) {
