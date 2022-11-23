@@ -10,7 +10,7 @@ class ShowSearchedBoardRepository implements ShowSearchedBoardRepositoryInterfac
                                 $query->select(['name','id']);
                             }])
                             ->skip(($page - 1) * 10)->take(10)
-                            ->get(['id' , 'title' , 'content','user_id','created_at','updated_at','private']);
+                            ->get(['id' , 'title' , 'content','user_id','created_at','updated_at','private','complete']);
         $pages = ceil(Board::where('title','LIKE','%'.$searchItem.'%')->count()/10);
 
         return [

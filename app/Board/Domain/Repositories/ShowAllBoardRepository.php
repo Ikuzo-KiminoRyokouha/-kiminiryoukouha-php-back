@@ -10,7 +10,7 @@ class ShowAllBoardRepository implements ShowAllBoardRepositoryInterface{
                 ->with(['user'=> function ($query) {
                     $query->select(['name','id']);
                 }])
-                ->get(['id' , 'title' , 'content','user_id','created_at','updated_at','private']);
+                ->get(['id' , 'title' , 'content','user_id','created_at','updated_at','private','complete']);
         $pages = ceil(Board::count()/6);
         return [
             'pages' => $pages,
